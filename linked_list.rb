@@ -64,10 +64,6 @@ class LinkedList
         @linked_list.find_index(value)
     end
 
-    # def list_longer_than_one?
-    #     @linked_list.size > 1
-    # end
-
     def to_s
         puts_linked_list = ""
         if @linked_list.empty?
@@ -75,9 +71,9 @@ class LinkedList
         else
             @linked_list.each do |node|
                 if @linked_list[-1] == node
-                    puts_linked_list += "( #{node} || next_node: #{node.next_node} ) -> nil"
+                    puts_linked_list += "( #{node} ) -> nil"
                 else
-                    puts_linked_list += "( #{node} || next_node: #{node.next_node} ) -> "
+                    puts_linked_list += "( #{node} ) -> "
                 end
             end
         end
@@ -85,9 +81,18 @@ class LinkedList
     end
 
     def insert_at(value, index)
-        @linked_list[index] = create_new_node(value)
+        if (index > 0 || index < -1)
+            first_half_linked_list = @linked_list.slice(0..(index - 1))
+            second_half_linked_list = @linked_list.slice(index..@linked_list.size)
+            first_half_linked_list.push(create_new_node(value))
+            @linked_list = first_half_linked_list + second_half_linked_list
+        elsif (index == -1)
+            @linked_list.push(create_new_node(value))
+        else
+            @linked_list.unshift(create_new_node(value))
+        end
         @linked_list.each_with_index do |node, idx|
-            node.next_node = @linked_list[idx + 1]
+                node.next_node = @linked_list[idx + 1]
         end
     end
 
